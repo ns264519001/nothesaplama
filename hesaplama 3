@@ -1,0 +1,45 @@
+function hesapla() {
+    const kurul1 = parseFloat(document.getElementById('kurul1').value);
+    const kurul2 = parseFloat(document.getElementById('kurul2').value);
+    const kurul3 = parseFloat(document.getElementById('kurul3').value);
+    const kurul4 = parseFloat(document.getElementById('kurul4').value);
+    const kurul5 = parseFloat(document.getElementById('kurul5').value);
+    const kurul6 = parseFloat(document.getElementById('kurul6').value);
+    const final = parseFloat(document.getElementById('final').value);
+
+    // Tüm notların geçerliliğini kontrol et (0-100 arası ve sayısal olmalı)
+    const notlar = [kurul1, kurul2, kurul3, kurul4, kurul5, kurul6, final];
+    for (let i = 0; i < notlar.length; i++) {
+        if (isNaN(notlar[i]) || notlar[i] < 0 || notlar[i] > 100) {
+            alert("Lütfen tüm notları 0 ile 100 arasında geçerli sayılar olarak girin.");
+            document.getElementById('kurulOrtalamaSonuc').innerText = "";
+            document.getElementById('genelOrtalamaSonuc').innerText = "";
+            document.getElementById('gecmeDurumu').innerText = "";
+            return;
+        }
+    }
+
+    // 1. Aşama: Kurul Sınavları Ortalaması (Yıl İçi Puanı)
+    const kurulOrtalamasi = 
+        (kurul1 * 0.18) + 
+        (kurul2 * 0.18) + 
+        (kurul3 * 0.18) + 
+        (kurul4 * 0.14) + 
+        (kurul5 * 0.14) + 
+        (kurul6 * 0.18);
+
+    // 2. Aşama: Genel Yıl Sonu Puanı
+    const genelYilSonuPuani = (kurulOrtalamasi * 0.60) + (final * 0.40);
+
+    document.getElementById('kurulOrtalamaSonuc').innerText = `Kurul Ortalamanız: ${kurulOrtalamasi.toFixed(2)}`;
+    document.getElementById('genelOrtalamaSonuc').innerText = `Genel Yıl Sonu Puanınız: ${genelYilSonuPuani.toFixed(2)}`;
+
+    const gecmeDurumuElement = document.getElementById('gecmeDurumu');
+    if (genelYilSonuPuani >= 50) { // Geçme notu 50 kabul edildi, değiştirebilirsin
+        gecmeDurumuElement.innerText = "Tebrikler, dersi başarıyla geçtiniz!";
+        gecmeDurumuElement.className = "gecildi";
+    } else {
+        gecmeDurumuElement.innerText = `Dersi geçmek için ${50 - genelYilSonuPuani.toFixed(2)} puana daha ihtiyacınız var.`;
+        gecmeDurumuElement.className = "kalindi";
+    }
+}
